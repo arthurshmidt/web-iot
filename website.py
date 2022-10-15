@@ -26,7 +26,7 @@ socketio = SocketIO(app)
 def data_relay():
     print("Starting communication thread")
     while True:
-        with open('/home/arthur/Dev/testing/website-testing/data/data.json','r') as openfile:
+        with open('/var/www/web-iot/data/data.json','r') as openfile:
             json_object = json.load(openfile)
         socketio.emit('update_data',json_object)
         time.sleep(1)
