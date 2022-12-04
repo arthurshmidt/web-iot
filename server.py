@@ -2,6 +2,14 @@ import time
 import json
 
 global data 
+global stpt
+
+def read_stpt(stpt_json):
+    
+    with open('data/stpt.json','r') as openfile:
+        stpt_json = json.load(openfile)
+    print("startstop value: "+ str(stpt_json["startstop"]))
+    return stpt_json
 
 def update_data(data_json):
     counter = data_json["value"] 
@@ -20,7 +28,12 @@ if __name__ == "__main__":
     data = {
         "value": 0
     }
+
+    stpt = {
+        "startstop": 0
+    }
+
     while True:
-        
+        stpt = read_stpt(stpt)
         data = update_data(data)
         time.sleep(1)

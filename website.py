@@ -26,9 +26,12 @@ socketio = SocketIO(app)
 def data_relay():
     print("Starting communication thread")
     while True:
-        with open('/var/www/web-iot/data/data.json','r') as openfile:
-            json_object = json.load(openfile)
-        socketio.emit('update_data',json_object)
+        with open('/var/www/web-iot/data/data.json','r') as datafile:
+            json_data = json.load(datafile)
+        socketio.emit('update_data',json_data)
+        with open('/var/www/web-iot/data/stpt.json','r') as stptfile:
+            json_stpt = json.load(stptfile)
+        socketio.emit('update_stpt',json_stpt)
         time.sleep(1)
         
 #
@@ -43,6 +46,12 @@ def connect():
     with thread_lock:
         if thread is None:
             thread = socketio.start_background_task(data_relay)
+
+@socketio.on('stpt')
+def stpt(stpt_json):
+    print("Running STPT!")
+    with open('/var/www/web-iot/data/stpt.json','w') as outfile:
+        json.dump(stpt_json,outfile)
 
 @socketio.on('disconnect')
 def disconnect():
